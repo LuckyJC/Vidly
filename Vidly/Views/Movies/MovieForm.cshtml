@@ -1,0 +1,33 @@
+﻿@using System.ComponentModel
+@model Vidly.ViewModels.MovieFormViewModel
+
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New</h2>
+
+@* wrapping this all in a using statement will add the closing form tag at the end*@
+@using (Html.BeginForm("Save", "Movies"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Movie.Name)
+        @Html.TextBoxFor(m => m.Movie.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Movie.ReleaseDate)
+        @Html.TextBoxFor(m => m.Movie.ReleaseDate, "{0:M/d/yyyy}", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Movie.GenreId)
+        @Html.DropDownListFor(m => m.Movie.GenreId, new SelectList(Model.Genres, "Id", "Name"), "Select Genre", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Movie.NumberInStock)
+        @Html.TextBoxFor(m => m.Movie.NumberInStock, new { @class = "form-control" })
+    </div>
+    //    Adding a hidden field to store movie id that is used in save action
+    @Html.HiddenFor(m => m.Movie.Id)
+    <button type="submit" class="btn btn-primary">Save</button>
+}

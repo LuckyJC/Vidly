@@ -85,8 +85,8 @@ namespace Vidly.Controllers
                 customerInDb.MembershipTypeId = customer.MembershipTypeId;
                 customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
 
-
             }
+
             //this will actually save changes to the database
             _context.SaveChanges();
 
