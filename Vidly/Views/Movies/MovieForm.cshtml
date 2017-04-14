@@ -2,11 +2,11 @@
 @model Vidly.ViewModels.MovieFormViewModel
 
 @{
-    ViewBag.Title = "New";
+    ViewBag.Title = Model.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>New</h2>
+<h2>@Model.Title</h2>
 
 @* wrapping this all in a using statement will add the closing form tag at the end*@
 @using (Html.BeginForm("Save", "Movies"))

@@ -1,33 +1,47 @@
 ﻿@using System.ComponentModel
 @model Vidly.ViewModels.CustomerFormViewModel
 @{
-    ViewBag.Title = "New";
+    ViewBag.Title = Model.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>New Customer</h2>
+<h2>@Model.Title</h2>
 
 @*the using tag will automatically close the form tag*@
 @using (@Html.BeginForm("Save", "Customers"))
 {
+    //to exclude individual errors and provide a general fix errors message, pass parameters to ValidationSummary(true, "Please fix your errors...")
+    @Html.ValidationSummary()
     <div class="form-group">
         @Html.LabelFor(m => m.Customer.Name)
         @Html.TextBoxFor(m => m.Customer.Name, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Customer.Birthday)
-        @Html.TextBoxFor(m => m.Customer.Birthday, "{0:M/d/yyyy}",new {@class = "form-control"})
+        @Html.ValidationMessageFor(m => m.Customer.Name)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Customer.MembershipTypeId)
-        @Html.DropDownListFor(m => m.Customer.MembershipTypeId, new SelectList(Model.MembershipTypes, "Id", "Name"), "Select Membership Type", new {@class = "form-control"})
+        @Html.DropDownListFor(m => m.Customer.MembershipTypeId, new SelectList(Model.MembershipTypes, "Id", "Name"), "Select Membership Type", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Customer.MembershipTypeId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.Birthday)
+        @Html.TextBoxFor(m => m.Customer.Birthday, "{0:M/d/yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Customer.Birthday)
     </div>
     <div class="checkbox">
         <label>
             @Html.CheckBoxFor(m => m.Customer.IsSubscribedToNewsletter) Subscribe to newsletter?
         </label>
     </div>
-//    Adding a hidden field to store customer id that is used in save action
+    
+    // Adding a hidden field to store customer id that is used in save action
     @Html.HiddenFor(m => m.Customer.Id)
+    // adding an antiforgerytoken to prevent CSRF cross site request forgery
+    @Html.AntiForgeryToken()
+    
     <button type="submit" class="btn btn-primary">Save</button>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
 }

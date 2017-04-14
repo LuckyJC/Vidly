@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -62,15 +63,19 @@ namespace Vidly.Controllers
         public ActionResult Save(Movie movie)
         {
             if (movie.Id == 0)
+            {
+                // Set DateAdded to now for new items
+                movie.DateAdded = DateTime.Now;
+
                 _context.Movies.Add(movie);
-            
+
+            }
             else
             {
                 var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
 
                 movieInDb.Name = movie.Name;
                 movieInDb.ReleaseDate = movie.ReleaseDate;
-                movieInDb.DateAdded = movie.DateAdded;
                 movieInDb.NumberInStock = movie.NumberInStock;
                 movieInDb.GenreId = movie.GenreId;
             }
