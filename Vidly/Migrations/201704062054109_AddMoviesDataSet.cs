@@ -1,8 +1,9 @@
 namespace Vidly.Migrations
 {
+    using System;
     using System.Data.Entity.Migrations;
-
-    public partial class AddMovie : DbMigration
+    
+    public partial class AddMoviesDataSet : DbMigration
     {
         public override void Up()
         {
@@ -24,14 +25,14 @@ namespace Vidly.Migrations
             CreateTable(
                 "dbo.Genres",
                 c => new
-                {
-                    Id = c.Byte(nullable: false),
-                    Name = c.String(nullable: false, maxLength: 255),
-                })
+                    {
+                        Id = c.Byte(nullable: false),
+                        Name = c.String(nullable: false, maxLength: 255),
+                    })
                 .PrimaryKey(t => t.Id);
 
         }
-
+        
         public override void Down()
         {
             DropForeignKey("dbo.Movies", "GenreId", "dbo.Genres");
