@@ -28,8 +28,9 @@ namespace Vidly.Controllers
             //the query will not be executed until the customers object is iterated (in the View). This is called deferred execution.
             // .Include() is called eager loading and is including loading the MembershipType with the customer; need to 
             //include the using System.Data.Entity statement above to resolve the c.MembershipType error that arises from using .Include()
-            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
-            return View(customers);
+            //removing the call to get customers as this will be handled client-side with ajax
+            //var customers = _context.Customers.Include(c => c.MembershipType).ToList();
+            return View(/*customers*/);
 
         }
 
