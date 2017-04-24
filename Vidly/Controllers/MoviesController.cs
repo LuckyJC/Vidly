@@ -28,9 +28,10 @@ namespace Vidly.Controllers
         //mvcaction4 code snippet to make default action result
         public ActionResult Index()
         {
-            var movies = _context.Movies.Include(m => m.Genre).ToList();
+            //commenting out movies in favor of using client-side rendering via ajax
+            //var movies = _context.Movies.Include(m => m.Genre).ToList();
 
-            return View(movies);
+            return View(/*movies*/);
         }
 
         //mvcaction4 code snippet to create this ActionResult
