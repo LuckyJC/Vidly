@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Vidly.Models;
@@ -12,7 +11,7 @@ namespace Vidly.Controllers
     {
         //by convention make a private instance of ApplicationDbContext in the controller
         private ApplicationDbContext _context;
-        
+
         //make a constructor that calls a new instance of _context
         public MoviesController()
         {
@@ -31,7 +30,10 @@ namespace Vidly.Controllers
             //commenting out movies in favor of using client-side rendering via ajax
             //var movies = _context.Movies.Include(m => m.Genre).ToList();
 
-            return View(/*movies*/);
+            if (User.IsInRole(RoleName.CanManageMovies))
+                return View("List");
+
+            return View("ReadOnlyList");
         }
 
         //mvcaction4 code snippet to create this ActionResult
@@ -49,6 +51,7 @@ namespace Vidly.Controllers
             return View(movie);
         }
 
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public ActionResult New()
         {
             var genres = _context.Genres.ToList();
@@ -60,7 +63,8 @@ namespace Vidly.Controllers
 
             return View("MovieForm", viewModel);
         }
-        
+
+        [Authorize(Roles = RoleName.CanManageMovies)]
         [HttpPost]
         public ActionResult Save(Movie movie)
         {
@@ -99,33 +103,34 @@ namespace Vidly.Controllers
             return RedirectToAction("Index", "Movies");
         }
 
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public ActionResult Edit(int id)
         {
             var movie = _context.Movies.SingleOrDefault(m => m.Id == id);
 
             if (movie == null)
                 return HttpNotFound();
-            
+
             var viewModel = new MovieFormViewModel
             {
                 Movie = movie,
                 Genres = _context.Genres.ToList()
-                
+
             };
 
             return View("MovieForm", viewModel);
         }
 
-//        //old method that would return hard coded movies. Used before adding the database and calling _context
-//        private IEnumerable<Movie> GetMovies()
-//        {
-//            return new List<Movie>
-//            {
-//                new Movie {Id = 1, Name = "Rambo" },
-//                new Movie {Id = 2, Name = "Predator" }
-//            };
-//
-//        }
+        //        //old method that would return hard coded movies. Used before adding the database and calling _context
+        //        private IEnumerable<Movie> GetMovies()
+        //        {
+        //            return new List<Movie>
+        //            {
+        //                new Movie {Id = 1, Name = "Rambo" },
+        //                new Movie {Id = 2, Name = "Predator" }
+        //            };
+        //
+        //        }
 
         // GET: Movies/Random will return Shrek!
         public ActionResult Random()

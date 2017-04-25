@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace Vidly.Controllers
 {
-    //to allow anonymous access to homepage
+    //to allow anonymous access to homepage- by applying it on the controller it will affect all of the actions
     [AllowAnonymous]
     public class HomeController : Controller
     {
