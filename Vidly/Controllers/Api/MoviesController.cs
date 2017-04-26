@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using System;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Http;
-using AutoMapper;
 using Vidly.Dtos;
 using Vidly.Models;
 
@@ -43,6 +40,7 @@ namespace Vidly.Controllers.Api
         }
 
         //POST /api/movies
+        [Authorize(Roles = RoleName.CanManageMovies)]
         [HttpPost]
         public IHttpActionResult CreateMovie(MovieDto movieDto)
         {
@@ -60,6 +58,7 @@ namespace Vidly.Controllers.Api
             return Created(new Uri(Request.RequestUri + "/" + movie.Id), movieDto);
         }
 
+        [Authorize(Roles = RoleName.CanManageMovies)]
         //PUT /api/movies/1
         [HttpPut]
         public IHttpActionResult UpdateMovie(int id, MovieDto movieDto)
@@ -79,6 +78,7 @@ namespace Vidly.Controllers.Api
             return Ok();
         }
 
+        [Authorize(Roles = RoleName.CanManageMovies)]
         //DELETE /api/movies/1
         [HttpDelete]
         public IHttpActionResult DeleteMovie(int id)
