@@ -22,7 +22,9 @@ namespace Vidly.Models
         [Range(1, 20)]
         [Display(Name = "Number in stock")]
         public int? NumberInStock { get; set; }
-        
+
+        public int? NumberAvailable { get; set; }
+
         [Required]
         [Display(Name = "Genre")]
         public byte GenreId { get; set; }
