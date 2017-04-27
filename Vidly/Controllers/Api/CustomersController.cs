@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using System;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using AutoMapper;
 using Vidly.Dtos;
 using Vidly.Models;
 
@@ -21,15 +18,20 @@ namespace Vidly.Controllers.Api
         }
 
         //GET /api/customers
-        public IHttpActionResult GetCustomers()
+        public IHttpActionResult GetCustomers(string query = null)
         {
             //removed the () from Mapper.Map<>() because we are not calling this method- using it as a delegate/reference to the method
-            var customersDto = _context.Customers
-                .Include(c => c.MembershipType)
+            var customersQuery = _context.Customers
+                .Include(c => c.MembershipType);
+
+            if (!String.IsNullOrWhiteSpace(query))
+                customersQuery = customersQuery.Where(c => c.Name.Contains(query));
+
+            var customerDtos = customersQuery
                 .ToList()
                 .Select(Mapper.Map<Customer, CustomerDto>);
 
-            return Ok(customersDto);
+            return Ok(customerDtos);
         }
 
         //GET /api/customers/1
@@ -53,7 +55,7 @@ namespace Vidly.Controllers.Api
                 return BadRequest();
 
             var customer = Mapper.Map<CustomerDto, Customer>(customerDto);
-            
+
             //add customer object and save changes
             _context.Customers.Add(customer);
             _context.SaveChanges();
